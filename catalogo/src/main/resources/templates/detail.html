@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettaglio Red Flag</title>
     <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/form.css}">
 </head>
@@ -13,11 +14,8 @@
 
     <!-- Header -->
     <div class="header details-header">
-        <h1>Aggiungi una Red Flag</h1>
+        <h1>Riepilogo Red Flag</h1>
     </div>
-
-    <!-- Alert di conferma -->
-    <div th:if="${success}" class="alert-success" th:text="${success}"></div>    
 
     <!-- Riepilogo -->
     <div class="form-container">
@@ -51,8 +49,10 @@
 
             <div class="form-group">
                 <label>Severità</label>
-                <div class="detail-value"
-                     th:text="${redflag.severity == 'low' ? 'Bassa' : redflag.severity == 'medium' ? 'Media' : 'Alta'}">
+                <div class="detail-value">
+                    <span th:if="${redflag.severity == 'low'}" class="severity-badge severity-low"><i class="fa-solid fa-circle-check"></i> Bassa</span>
+                    <span th:if="${redflag.severity == 'medium'}" class="severity-badge severity-medium"><i class="fa-solid fa-circle-exclamation"></i> Media</span>
+                    <span th:if="${redflag.severity == 'high'}" class="severity-badge severity-high"><i class="fa-solid fa-circle-radiation"></i> Alta</span>
                 </div>
             </div>
 
@@ -64,18 +64,17 @@
     </div>
 </div>
 
-<style>
-    .alert-success {
-        width: fit-content;
-        margin: 0 auto 50px;
-        padding: 14px 20px;
-        background-color: #e8f5e9;
-        border: 2px solid #4caf50;
-        border-radius: 10px;
-        color: #2e7d32;
-        font-size: 1.1em;
-        text-align: center;
+<!-- Toast di feedback -->
+<div th:if="${success}" id="toast" class="toast" th:text="${success}"></div>
+
+<script>
+    const toast = document.getElementById('toast');
+    if (toast) {
+        setTimeout(() => toast.classList.add('toast-hide'), 5000);
     }
+</script>
+
+<style>
 
     .detail-value {
         padding: 12px;

@@ -81,6 +81,13 @@ public class CatalogController {
         return "detail";
     }
 
+    @PostMapping("/delete/{code}")
+    public String deleteRedFlag(@PathVariable UUID code, RedirectAttributes redirectAttributes) {
+        redFlagService.delete(code);
+        redirectAttributes.addFlashAttribute("success", "Red Flag eliminata con successo!");
+        return "redirect:/";
+    }
+
     @PostMapping("/clear")
     public String clearCatalog(RedirectAttributes redirectAttributes) {
         redFlagService.deleteAll();

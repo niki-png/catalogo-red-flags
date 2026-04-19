@@ -8,6 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>Catalogo Red Flags</title>
     <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -39,15 +40,27 @@
                     <th>Persona Coinvolta</th>
                     <th>Contesto</th>
                     <th>Severità</th>
+                    <th>Azioni</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="item : ${redflags}">
-                    <td th:text="${item.code}"></td>
+                    <td><a th:href="@{/item/{code}(code=${item.code})}" class="code-link" th:text="${item.code}"></a></td>
                     <td th:text="${item.title}"></td>
                     <td th:text="${item.personInvolved}"></td>
                     <td th:text="${item.context}"></td>
-                    <td th:text="${item.severity}"></td>
+                    <td>
+                        <span th:if="${item.severity == 'low'}" class="severity-badge severity-low"><i class="fa-solid fa-circle-exclamation"></i> Bassa</span>
+                        <span th:if="${item.severity == 'medium'}" class="severity-badge severity-medium"><i class="fa-solid fa-circle-radiation"></i> Media</span>
+                        <span th:if="${item.severity == 'high'}" class="severity-badge severity-high"><i class="fa-solid fa-skull"></i> Alta</span>
+                    </td>
+                    <td>
+                        <form th:action="@{/delete/{code}(code=${item.code})}" method="post" style="margin:0;" class="delete-form">
+                            <button type="button" class="btn btn-delete" onclick="openDeleteModal(this.closest('form'), this.closest('tr').querySelector('td:nth-child(2)').textContent)">
+                                <i class="fa-solid fa-trash-can" style="color: #fbf6ed;"></i>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -58,5 +71,49 @@
         <p>Totale elementi: <strong th:text="${redflags.size()}"></strong></p>
     </div>
 </div>
+
+<!-- Modal di conferma eliminazione -->
+<div id="deleteModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h2 class="modal-title">Eliminare questa Red Flag?</h2>
+        <p class="modal-subtitle" id="modalItemName"></p>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeDeleteModal()">Annulla</button>
+            <button class="btn btn-primary" id="modalConfirmBtn">Elimina</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast di feedback -->
+<div th:if="${success}" id="toast" class="toast" th:text="${success}"></div>
+
+<script>
+    const toast = document.getElementById('toast');
+    if (toast) {
+        setTimeout(() => toast.classList.add('toast-hide'), 5000);
+    }
+
+    let pendingForm = null;
+
+    function openDeleteModal(form, itemName) {
+        pendingForm = form;
+        document.getElementById('modalItemName').textContent = itemName;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        pendingForm = null;
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.getElementById('modalConfirmBtn').addEventListener('click', () => {
+        if (pendingForm) pendingForm.submit();
+    });
+
+    document.getElementById('deleteModal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeDeleteModal();
+    });
+</script>
 </body>
 </html>
