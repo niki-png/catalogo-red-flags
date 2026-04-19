@@ -18,16 +18,37 @@
         <h1>Una collezione di Red Flags uniche</h1>
         <div class="buttons">
             <a href="/new" class="btn btn-primary">Aggiungi Red Flag</a>
-            <form method="post" action="/clear" style="display: inline;">
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Sei sicuro? Questa azione non può essere annullata!')">Svuota Catalogo</button>
+            <form method="post" action="/clear" style="display: inline;" id="clearForm">
+                <button type="button" class="btn btn-danger" onclick="openClearModal()">Svuota Catalogo</button>
             </form>
         </div>
     </div>
 
+    <!-- Barra di ricerca -->
+    <div class="search-bar">
+        <form method="get" action="/" class="search-form">
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" name="search" class="search-input"
+                       placeholder="Cerca per titolo..."
+                       th:value="${searchQuery}">
+                <button th:if="${searchQuery != null and !searchQuery.isEmpty()}"
+                        type="button"
+                        class="search-clear"
+                        onclick="window.location.href='/'">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <button type="submit" class="btn btn-primary">Cerca</button>
+        </form>
+    </div>
+
     <!-- Empty State -->
     <div th:if="${#lists.isEmpty(redflags)}" class="empty-state">
-        <h2>Il catalogo è vuoto</h2>
-        <p>Nessuna red flag nel catalogo. Aggiungi la tua!</p>
+        <h2 th:if="${searchQuery != null and !searchQuery.isEmpty()}">Nessun risultato trovato</h2>
+        <p th:if="${searchQuery != null and !searchQuery.isEmpty()}">Nessuna red flag corrisponde alla ricerca. <br> <a href="/">Mostra tutte</a></p>
+        <h2 th:if="${searchQuery == null or searchQuery.isEmpty()}">Il catalogo è vuoto</h2>
+        <p th:if="${searchQuery == null or searchQuery.isEmpty()}">Nessuna red flag nel catalogo. Aggiungi la tua!</p>
     </div>
 
     <!-- Table -->
@@ -36,10 +57,30 @@
             <thead>
                 <tr>
                     <th>Codice</th>
-                    <th>Titolo</th>
-                    <th>Persona Coinvolta</th>
-                    <th>Contesto</th>
-                    <th>Severità</th>
+                    <th>
+                        <a th:href="@{/(sort=${currentSort == 'title' ? '-title' : (currentSort == '-title' ? 'createdAt' : 'title')}, search=${searchQuery})}" class="sort-link">
+                            Titolo
+                            <i th:classappend="${currentSort == 'title'} ? 'fa-sort-up' : (${currentSort == '-title'} ? 'fa-sort-down' : 'fa-sort')" class="fa-solid"></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/(sort=${currentSort == 'personInvolved' ? '-personInvolved' : (currentSort == '-personInvolved' ? 'createdAt' : 'personInvolved')}, search=${searchQuery})}" class="sort-link">
+                            Persona Coinvolta
+                            <i th:classappend="${currentSort == 'personInvolved'} ? 'fa-sort-up' : (${currentSort == '-personInvolved'} ? 'fa-sort-down' : 'fa-sort')" class="fa-solid"></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/(sort=${currentSort == 'context' ? '-context' : (currentSort == '-context' ? 'createdAt' : 'context')}, search=${searchQuery})}" class="sort-link">
+                            Contesto
+                            <i th:classappend="${currentSort == 'context'} ? 'fa-sort-up' : (${currentSort == '-context'} ? 'fa-sort-down' : 'fa-sort')" class="fa-solid"></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/(sort=${currentSort == 'severity' ? '-severity' : (currentSort == '-severity' ? 'createdAt' : 'severity')}, search=${searchQuery})}" class="sort-link">
+                            Severità
+                            <i th:classappend="${currentSort == 'severity'} ? 'fa-sort-up' : (${currentSort == '-severity'} ? 'fa-sort-down' : 'fa-sort')" class="fa-solid"></i>
+                        </a>
+                    </th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -55,11 +96,16 @@
                         <span th:if="${item.severity == 'high'}" class="severity-badge severity-high"><i class="fa-solid fa-skull"></i> Alta</span>
                     </td>
                     <td>
-                        <form th:action="@{/delete/{code}(code=${item.code})}" method="post" style="margin:0;" class="delete-form">
-                            <button type="button" class="btn btn-delete" onclick="openDeleteModal(this.closest('form'), this.closest('tr').querySelector('td:nth-child(2)').textContent)">
-                                <i class="fa-solid fa-trash-can" style="color: #fbf6ed;"></i>
-                            </button>
-                        </form>
+                        <div style="display:flex; gap:6px;">
+                            <a th:href="@{/edit/{code}(code=${item.code})}" class="btn btn-edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <form th:action="@{/delete/{code}(code=${item.code})}" method="post" style="margin:0;" class="delete-form">
+                                <button type="button" class="btn btn-delete" onclick="openDeleteModal(this.closest('form'), this.closest('tr').querySelector('td:nth-child(2)').textContent)">
+                                    <i class="fa-solid fa-trash-can" style="color: #fbf6ed;"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -69,6 +115,19 @@
     <!-- Footer Info -->
     <div th:if="${not #lists.isEmpty(redflags)}" style="margin-top: 30px; text-align: center; color: #999;">
         <p>Totale elementi: <strong th:text="${redflags.size()}"></strong></p>
+    </div>
+</div>
+
+<!-- Modal svuota catalogo -->
+<div id="clearModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <div class="modal-icon"><i class="fa-solid fa-trash-can"></i></div>
+        <h2 class="modal-title">Svuotare il catalogo?</h2>
+        <p class="modal-subtitle">Questa azione eliminerà tutte le Red Flags e non può essere annullata!</p>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeClearModal()">Annulla</button>
+            <button class="btn btn-primary" onclick="document.getElementById('clearForm').submit()">Svuota</button>
+        </div>
     </div>
 </div>
 
@@ -113,6 +172,18 @@
 
     document.getElementById('deleteModal').addEventListener('click', (e) => {
         if (e.target === e.currentTarget) closeDeleteModal();
+    });
+
+    function openClearModal() {
+        document.getElementById('clearModal').style.display = 'flex';
+    }
+
+    function closeClearModal() {
+        document.getElementById('clearModal').style.display = 'none';
+    }
+
+    document.getElementById('clearModal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeClearModal();
     });
 </script>
 </body>

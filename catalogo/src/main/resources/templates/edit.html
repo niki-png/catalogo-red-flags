@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Red Flag</title>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>Modifica Red Flag</h1>
+    </div>
+
+    <!-- Form -->
+    <div class="form-container">
+        <form th:action="@{/edit/{code}(code=${redflag.code})}" method="post" class="form">
+
+            <div class="form-group">
+                <label>Codice</label>
+                <div class="detail-value code-readonly" th:text="${redflag.code}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Titolo *</label>
+                <input type="text" id="title" name="title" required th:value="${redflag.title}">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descrizione *</label>
+                <textarea id="description" name="description" required th:text="${redflag.description}"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="personInvolved">Persona Coinvolta *</label>
+                    <select id="personInvolved" name="personInvolved" required>
+                        <option value="">-- Seleziona --</option>
+                        <option th:each="person : ${personTypes}"
+                                th:value="${person}"
+                                th:text="${person}"
+                                th:selected="${person == redflag.personInvolved}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="context">Contesto *</label>
+                    <select id="context" name="context" required>
+                        <option value="">-- Seleziona --</option>
+                        <option th:each="ctx : ${contexts}"
+                                th:value="${ctx}"
+                                th:text="${ctx}"
+                                th:selected="${ctx == redflag.context}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="severity">Severità *</label>
+                <select id="severity" name="severity" required>
+                    <option value="">-- Seleziona --</option>
+                    <option value="low"    th:selected="${redflag.severity == 'low'}">Bassa</option>
+                    <option value="medium" th:selected="${redflag.severity == 'medium'}">Media</option>
+                    <option value="high"   th:selected="${redflag.severity == 'high'}">Alta</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salva modifiche</button>
+                <a th:href="@{/}" class="btn btn-secondary">Annulla</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

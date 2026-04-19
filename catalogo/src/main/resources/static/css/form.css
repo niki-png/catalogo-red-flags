@@ -7,6 +7,10 @@
     box-shadow: 0 2px 5px rgba(123, 42, 42, 0.4);
 }
 
+.details-form-container {
+    background-color: #aacbd8;
+}
+
 .form {
     display: flex;
     flex-direction: column;

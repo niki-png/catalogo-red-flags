@@ -13,6 +13,12 @@ public interface RedFlagRepository extends JpaRepository<RedFlag, UUID> {
     
     List<RedFlag> findByTitleContainingIgnoreCase(String title);
     
+    @Query(value = "SELECT * FROM redflags ORDER BY FIELD(severity, 'low', 'medium', 'high')", nativeQuery = true)
+    List<RedFlag> findAllBySeverityAsc();
+
+    @Query(value = "SELECT * FROM redflags ORDER BY FIELD(severity, 'high', 'medium', 'low')", nativeQuery = true)
+    List<RedFlag> findAllBySeverityDesc();
+
     @Query("SELECT DISTINCT r.personInvolved FROM RedFlag r ORDER BY r.personInvolved")
     List<String> findAllPersonTypes();
     

@@ -24,6 +24,12 @@ public class RedFlagService {
     }
     
     public List<RedFlag> findAll(String sortBy) {
+        if (sortBy.equals("severity")) {
+            return repository.findAllBySeverityAsc();
+        }
+        if (sortBy.equals("-severity")) {
+            return repository.findAllBySeverityDesc();
+        }
         Sort.Direction direction = Sort.Direction.ASC;
         if (sortBy.startsWith("-")) {
             direction = Sort.Direction.DESC;

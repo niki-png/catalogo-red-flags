@@ -50,8 +50,8 @@ public class CatalogController {
 
     @GetMapping("/new")
     public String newRedFlag(Model model) {
-        model.addAttribute("personTypes", redFlagService.getAllPersonTypes());
-        model.addAttribute("contexts", redFlagService.getAllContexts());
+        model.addAttribute("personTypes", List.of("crush", "amico/a", "ex", "collega", "familiare", "conoscente", "sconosciuto", "altro"));
+        model.addAttribute("contexts", List.of("relazione", "amicizia", "lavoro", "social", "chat"));
         return "form";
     }
 
@@ -79,6 +79,43 @@ public class CatalogController {
         }
         model.addAttribute("redflag", redFlag.get());
         return "detail";
+    }
+
+    @GetMapping("/edit/{code}")
+    public String editRedFlagForm(@PathVariable UUID code, Model model) {
+        Optional<RedFlag> redFlag = redFlagService.findById(code);
+        if (redFlag.isEmpty()) {
+            return "redirect:/";
+        }
+        model.addAttribute("redflag", redFlag.get());
+        model.addAttribute("personTypes", List.of("crush", "amico/a", "ex", "collega", "familiare", "conoscente", "sconosciuto", "altro"));
+        model.addAttribute("contexts", List.of("relazione", "amicizia", "lavoro", "social", "chat"));
+        return "edit";
+    }
+
+    @PostMapping("/edit/{code}")
+    public String updateRedFlag(
+            @PathVariable UUID code,
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String personInvolved,
+            @RequestParam String context,
+            @RequestParam String severity,
+            RedirectAttributes redirectAttributes) {
+
+        Optional<RedFlag> existing = redFlagService.findById(code);
+        if (existing.isEmpty()) {
+            return "redirect:/";
+        }
+        RedFlag redFlag = existing.get();
+        redFlag.setTitle(title);
+        redFlag.setDescription(description);
+        redFlag.setPersonInvolved(personInvolved);
+        redFlag.setContext(context);
+        redFlag.setSeverity(severity);
+        redFlagService.save(redFlag);
+        redirectAttributes.addFlashAttribute("success", "Red Flag aggiornata con successo!");
+        return "redirect:/item/" + code;
     }
 
     @PostMapping("/delete/{code}")

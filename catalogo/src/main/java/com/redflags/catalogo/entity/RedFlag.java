@@ -24,7 +24,7 @@ public class RedFlag {
 
     @NotBlank(message = "La persona coinvolta è obbligatoria")
     @Column(nullable = false, length = 50)
-    private String personInvolved; // crush, amico/a, ex, collega, sconosciuto, altro
+    private String personInvolved;
 
     @NotBlank(message = "Il contesto è obbligatorio")
     @Column(nullable = false, length = 50)
