@@ -1,14 +1,15 @@
-package com.example.catalog.repository;
+package com.redflags.catalogo.repository;
 
-import com.example.catalog.entity.RedFlag;
+import com.redflags.catalogo.entity.RedFlag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface RedFlagRepository extends JpaRepository<RedFlag, String> {
+public interface RedFlagRepository extends JpaRepository<RedFlag, UUID> {
     
     List<RedFlag> findByTitleContainingIgnoreCase(String title);
     

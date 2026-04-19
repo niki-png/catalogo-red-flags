@@ -1,7 +1,7 @@
-package com.example.catalog.controller;
+package com.redflags.catalogo.controller;
 
-import com.example.catalog.entity.RedFlag;
-import com.example.catalog.service.RedFlagService;
+import com.redflags.catalogo.entity.RedFlag;
+import com.redflags.catalogo.service.RedFlagService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

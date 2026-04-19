@@ -1,17 +1,18 @@
-package com.example.catalog.entity;
+package com.redflags.catalogo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "redflags")
 public class RedFlag {
 
     @Id
-    @Column(length = 10)
-    private String code;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "code", nullable = false, unique = true, updatable = false)
+    private UUID code;
 
     @NotBlank(message = "Il titolo è obbligatorio")
     @Column(nullable = false, length = 100)
@@ -53,8 +54,7 @@ public class RedFlag {
     // Constructors
     public RedFlag() {}
 
-    public RedFlag(String code, String title, String description, String personInvolved, String context, String severity) {
-        this.code = code;
+    public RedFlag(String title, String description, String personInvolved, String context, String severity) {
         this.title = title;
         this.description = description;
         this.personInvolved = personInvolved;
@@ -63,8 +63,8 @@ public class RedFlag {
     }
 
     // Getters and Setters
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+    public UUID getCode() { return code; }
+    public void setCode(UUID code) { this.code = code; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

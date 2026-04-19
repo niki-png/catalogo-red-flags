@@ -1,13 +1,14 @@
-package com.example.catalog.service;
+package com.redflags.catalogo.service;
 
-import com.example.catalog.entity.RedFlag;
-import com.example.catalog.repository.RedFlagRepository;
+import com.redflags.catalogo.entity.RedFlag;
+import com.redflags.catalogo.repository.RedFlagRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class RedFlagService {
@@ -38,7 +39,7 @@ public class RedFlagService {
         return repository.findByTitleContainingIgnoreCase(query.trim());
     }
     
-    public Optional<RedFlag> findById(String code) {
+    public Optional<RedFlag> findById(UUID code) {
         return repository.findById(code);
     }
     
@@ -48,7 +49,7 @@ public class RedFlagService {
     }
     
     @Transactional
-    public void delete(String code) {
+    public void delete(UUID code) {
         repository.deleteById(code);
     }
     
@@ -57,7 +58,7 @@ public class RedFlagService {
         repository.deleteAll();
     }
     
-    public boolean exists(String code) {
+    public boolean exists(UUID code) {
         return repository.existsById(code);
     }
     
