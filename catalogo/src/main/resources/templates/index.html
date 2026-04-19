@@ -14,7 +14,13 @@
 <div class="container">
     <!-- Header -->
     <div class="header">
-        <h1>Catalogo Red Flags</h1>
+        <h1>Una collezione di Red Flags uniche</h1>
+        <div class="buttons">
+            <a href="/new" class="btn btn-primary">Aggiungi Red Flag</a>
+            <form method="post" action="/clear" style="display: inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Sei sicuro? Questa azione non può essere annullata!')">Svuota Catalogo</button>
+            </form>
+        </div>
     </div>
 
     <!-- Empty State -->

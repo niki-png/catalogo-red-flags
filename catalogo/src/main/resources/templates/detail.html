@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettaglio Red Flag</title>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+</head>
+<body>
+<div class="container">
+
+    <!-- Alert di conferma -->
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Red Flag aggiunta!</h1>
+    </div>
+
+    <!-- Riepilogo -->
+    <div class="form-container">
+        <div class="form">
+
+            <div class="form-group">
+                <label>Codice</label>
+                <div class="detail-value" th:text="${redflag.code}"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Titolo</label>
+                <div class="detail-value" th:text="${redflag.title}"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Descrizione</label>
+                <div class="detail-value" th:text="${redflag.description}"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Persona Coinvolta</label>
+                    <div class="detail-value" th:text="${redflag.personInvolved}"></div>
+                </div>
+                <div class="form-group">
+                    <label>Contesto</label>
+                    <div class="detail-value" th:text="${redflag.context}"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Severità</label>
+                <div class="detail-value"
+                     th:text="${redflag.severity == 'low' ? 'Bassa' : redflag.severity == 'medium' ? 'Media' : 'Alta'}">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/" class="btn btn-primary">Torna al catalogo</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .alert-success {
+        max-width: 600px;
+        margin: 0 auto 20px;
+        padding: 14px 20px;
+        background-color: #e8f5e9;
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        color: #2e7d32;
+        font-size: 1.1em;
+        text-align: center;
+    }
+
+    .detail-value {
+        padding: 12px;
+        border: 2px solid #cf4538;
+        border-radius: 5px;
+        background-color: white;
+        color: #333;
+        font-size: 1em;
+        min-height: 44px;
+        word-break: break-word;
+    }
+</style>
+
+</body>
+</html>

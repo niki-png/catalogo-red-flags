@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Aggiungi Red Flag</title>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>Aggiungi una nuova Red Flag</h1>
+    </div>
+
+    <!-- Form -->
+    <div class="form-container">
+        <form method="post" action="add" class="form">
+            <div class="form-group">
+                <label for="title">Titolo *</label>
+                <input type="text" id="title" name="title" required placeholder="Es: Mi ignora quando esce con gli amici">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descrizione *</label>
+                <textarea id="description" name="description" required placeholder="Descrivi il comportamento sospetto..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="personInvolved">Persona Coinvolta *</label>
+                    <select id="personInvolved" name="personInvolved" required>
+                        <option value="">-- Seleziona --</option>
+                        <option th:each="person : ${personTypes}" th:value="${person}" th:text="${person}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="context">Contesto *</label>
+                    <select id="context" name="context" required>
+                        <option value="">-- Seleziona --</option>
+                        <option th:each="ctx : ${contexts}" th:value="${ctx}" th:text="${ctx}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="severity">Severità *</label>
+                <select id="severity" name="severity" required>
+                    <option value="">-- Seleziona --</option>
+                    <option value="low">Bassa</option>
+                    <option value="medium">Media</option>
+                    <option value="high">Alta</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salva Red Flag</button>
+                <a href="/" class="btn btn-secondary">Annulla</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
