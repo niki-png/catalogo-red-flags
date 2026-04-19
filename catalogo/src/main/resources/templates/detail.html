@@ -9,15 +9,15 @@
     <link rel="stylesheet" th:href="@{/css/form.css}">
 </head>
 <body>
-<div class="container">
-
-    <!-- Alert di conferma -->
-    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+<div class="container details-container">
 
     <!-- Header -->
-    <div class="header">
-        <h1>Red Flag aggiunta!</h1>
+    <div class="header details-header">
+        <h1>Aggiungi una Red Flag</h1>
     </div>
+
+    <!-- Alert di conferma -->
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>    
 
     <!-- Riepilogo -->
     <div class="form-container">
@@ -66,8 +66,8 @@
 
 <style>
     .alert-success {
-        max-width: 600px;
-        margin: 0 auto 20px;
+        width: fit-content;
+        margin: 0 auto 50px;
         padding: 14px 20px;
         background-color: #e8f5e9;
         border: 2px solid #4caf50;
@@ -79,10 +79,9 @@
 
     .detail-value {
         padding: 12px;
-        border: 2px solid #cf4538;
         border-radius: 5px;
         background-color: white;
-        color: #333;
+        color: #cf4538;
         font-size: 1em;
         min-height: 44px;
         word-break: break-word;
